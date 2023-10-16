@@ -25,7 +25,6 @@ public class EventHandler implements Callable<String> {
         String result = " ";
         for (Map.Entry<String, Event> i : map.entrySet()) {
             d = Duration.between(LocalDateTime.now(), i.getValue().getDate()).toSeconds();
-//            System.out.println(d);
             switch (mode) {
                 case MODE1:
                     while (d > 0) {
@@ -45,8 +44,7 @@ public class EventHandler implements Callable<String> {
                         int notificationAfterEvent = 0;   //количество раз отправки сообщения после начала мероприятия
                         while (notificationAfterEvent < 10) {
                             SECONDS.sleep(1);
-                            result = "Мероприятие " + "\"" + i.getValue().getName() + "\"" + " уже началось";
-                            System.out.println(Thread.currentThread().getName() + " " + result);
+                            result = Thread.currentThread().getName() + " " + "Мероприятие " + "\"" + i.getValue().getName() + "\"" + " уже началось";
                             ++notificationAfterEvent;
                             break;
                         }
