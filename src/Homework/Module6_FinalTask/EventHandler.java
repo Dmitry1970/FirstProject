@@ -21,16 +21,16 @@ public class EventHandler implements Callable<String> {
 
     @Override
     public String call() throws InterruptedException {
-        long d = 0;
+        long d;
         String result = " ";
         for (Map.Entry<String, Event> i : map.entrySet()) {
             d = Duration.between(LocalDateTime.now(), i.getValue().getDate()).toSeconds();
             switch (mode) {
                 case MODE1:
-                    while (d > 0) {
-                        SECONDS.sleep(1);
+                    while (d  > 0) {
                         System.out.println(Thread.currentThread().getName() + " " + i.getKey() + " время до старта " +
-                                Duration.between(LocalDateTime.now(), i.getValue().getDate()).toSeconds() + " секунд");
+                                d + " секунд");
+                        SECONDS.sleep(1);
                         d--;
                     }
                 case MODE2:
@@ -38,15 +38,18 @@ public class EventHandler implements Callable<String> {
                         i.getValue().setIsActive(true);
                         System.out.println(Thread.currentThread().getName() + " " + i.getValue().getName() +
                                 " уже началось!");
+
                     }
                 case MODE3:
                     if (i.getValue().getIsActive()) {
                         int notificationAfterEvent = 0;   //количество раз отправки сообщения после начала мероприятия
-                        while (notificationAfterEvent < 10) {
+
+                        while (d < 5) {
                             SECONDS.sleep(1);
                             result = Thread.currentThread().getName() + " " + "Мероприятие " + "\"" + i.getValue().getName() + "\"" + " уже началось";
-                            ++notificationAfterEvent;
-                            break;
+                            System.out.println(result);
+                            ++d;
+
                         }
                     }
             }
