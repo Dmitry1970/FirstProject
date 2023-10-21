@@ -11,47 +11,37 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 public class EventHandler implements Callable<String> {
 
     private Map<String, Event> map;
-    private Mode mode;
 
-
-    public EventHandler(Mode mode, Map<String, Event> map) {
-        this.mode = mode;
+    public EventHandler(Map<String, Event> map) {
         this.map = map;
     }
 
     @Override
     public String call() throws InterruptedException {
-        long d;
         String result = " ";
-        for (Map.Entry<String, Event> i : map.entrySet()) {
-            d = Duration.between(LocalDateTime.now(), i.getValue().getDate()).toSeconds();
-            switch (mode) {
-                case MODE1:
-                    while (d  > 0) {
-                        System.out.println(Thread.currentThread().getName() + " " + i.getKey() + " время до старта " +
-                                d + " секунд");
-                        SECONDS.sleep(1);
-                        d--;
-                    }
-                case MODE2:
-                    if (d == 0) {
-                        i.getValue().setIsActive(true);
-                        System.out.println(Thread.currentThread().getName() + " " + i.getValue().getName() +
-                                " уже началось!");
+        for (Event i : map.values()) {
+            long d = Duration.between(LocalDateTime.now(), i.getDate()).toSeconds();
+            while (d > 0) {
+                d = Duration.between(LocalDateTime.now(), i.getDate()).toSeconds();
+                System.out.println(Thread.currentThread().getName() + " " + i + " время до старта " +
+                        Duration.between(LocalDateTime.now(), i.getDate()).toSeconds() + " секунд");
+                SECONDS.sleep(1);
+            }
+            if (d == 0 && !i.getIsActive()) {
+                System.out.println(Thread.currentThread().getName() + " " + i +
+                        " уже началось!");
+                i.setIsActive(true);
+            }
 
-                    }
-                case MODE3:
-                    if (i.getValue().getIsActive()) {
-                        int notificationAfterEvent = 0;   //количество раз отправки сообщения после начала мероприятия
-
-                        while (d < 5) {
-                            SECONDS.sleep(1);
-                            result = Thread.currentThread().getName() + " " + "Мероприятие " + "\"" + i.getValue().getName() + "\"" + " уже началось";
-                            System.out.println(result);
-                            ++d;
-
-                        }
-                    }
+            if (i.getIsActive()) {
+                int notificationAfterEvent = 0;   //количество раз отправки сообщения после начала мероприятия
+                while (notificationAfterEvent < 5) {
+                    SECONDS.sleep(1);
+                    result = Thread.currentThread().getName() + " " + "Мероприятие " + "\"" + i +
+                            "\"" + " уже началось";
+                    System.out.println(result);
+                    notificationAfterEvent++;
+                }
             }
         }
         return result;

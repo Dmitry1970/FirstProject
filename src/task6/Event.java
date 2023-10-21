@@ -1,19 +1,21 @@
-package Homework.Module6_FinalTask;
+package task6;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class Event {
 
     private String name;
     private LocalDateTime date;
     private String description;
+
     private boolean isActive;
+
 
     public Event(String name, LocalDateTime date, String description, boolean isActive) {
         this.name = name;
         this.date = date;
         this.description = description;
+
         this.isActive = isActive;
     }
 
@@ -53,7 +55,7 @@ public class Event {
     public String toString() {
         final StringBuilder sb = new StringBuilder("Event{");
         sb.append("name='").append(name).append('\'');
-        sb.append(", date=").append(date.format(DateTimeFormatter.ofPattern("dd MMMM yyyy hh:mm:ss")));
+        sb.append(", date=").append(date);
         sb.append(", description='").append(description).append('\'');
         sb.append(", isActive=").append(isActive);
         sb.append('}');
