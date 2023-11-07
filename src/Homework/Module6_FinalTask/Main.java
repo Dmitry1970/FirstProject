@@ -20,9 +20,15 @@ public class Main {
         eventMap.put(event2.getName(), event2);
 
         Callable<String> eventHandler1 = new EventHandler(eventMap);
+        Callable<String> eventHandler2 = new EventHandler(eventMap);
+        Callable<String> eventHandler3 = new EventHandler(eventMap);
+        Callable<String> eventHandler4 = new EventHandler(eventMap);
 
         ExecutorService executor = Executors.newFixedThreadPool(10);
         executor.submit(eventHandler1);
+        executor.submit(eventHandler2);
+        executor.submit(eventHandler3);
+        executor.submit(eventHandler4);
 
         executor.shutdown();
     }
